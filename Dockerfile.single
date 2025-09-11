@@ -1,37 +1,38 @@
-FROM rocker/shiny:latest
 
-# Install Miniconda
-RUN apt-get update && apt-get install -y wget bzip2 nginx supervisor && \
-    wget --quiet https://repo.anaconda.com/miniconda/Miniconda3-latest-Linux-x86_64.sh -O ~/miniconda.sh && \
-    /bin/bash ~/miniconda.sh -b -p /opt/conda && \
-    rm ~/miniconda.sh && \
-    ln -s /opt/conda/etc/profile.d/conda.sh /etc/profile.d/conda.sh && \ 
-    adduser --system --no-create-home --shell /bin/false --group --disabled-login nginx
+FROM condaforge/mambaforge:24.3.0-0
 
+# Install system dependencies including nginx and supervisor
+RUN apt-get update && apt-get install -y \
+    nginx \
+    supervisor \
+    && rm -rf /var/lib/apt/lists/*
 
-RUN /opt/conda/bin/conda install -c bioconda -c conda-forge mamba -y
+# Add a non-privileged user for nginx
+RUN adduser --system --no-create-home --shell /bin/false --group --disabled-login nginx
 
+# Copy environment.yaml
 COPY environment.yaml /srv/shiny-server/environment.yaml
 
-RUN /opt/conda/bin/mamba env create -f /srv/shiny-server/environment.yaml
+# Create the conda environment from the YAML file
+RUN mamba env create -f /srv/shiny-server/environment.yaml
 
-# Activate the environment and set the PATH
-ENV PATH=/opt/conda/envs/merged_env/bin:$PATH
+# Set the PATH to include the conda environment
+ENV PATH /opt/conda/envs/merged_env/bin:$PATH
 
-#RUN /opt/conda/bin/conda run -n merged_env R -e "devtools::install_github('smin95/smplot2')"
-RUN /opt/conda/bin/conda run -n merged_env  R -e "install.packages('smplot2', repos='http://cran.rstudio.com/')"
-RUN /opt/conda/bin/conda run -n merged_env  R -e "install.packages('GOplot', repos='http://cran.rstudio.com/')"
-RUN /opt/conda/bin/conda run -n merged_env  R -e "install.packages('wordcloud2', repos='http://cran.rstudio.com/')"
+# Install R packages
+RUN conda run -n merged_env R -e "install.packages('smplot2', repos='http://cran.rstudio.com/')"
+RUN conda run -n merged_env R -e "install.packages('GOplot', repos='http://cran.rstudio.com/')"
+RUN conda run -n merged_env R -e "install.packages('wordcloud2', repos='http://cran.rstudio.com/')"
 
-RUN /opt/conda/bin/conda run -n merged_env R -e "devtools::install_github('cole-trapnell-lab/monocle3')"
-RUN /opt/conda/bin/conda run -n merged_env R -e "devtools::install_github('mahmoudibrahim/genesorteR')"
-RUN /opt/conda/bin/conda run -n merged_env R -e "remotes::install_github('satijalab/seurat-wrappers')"
-RUN /opt/conda/bin/conda run -n merged_env R -e "remotes::install_github('daqana/dqshiny')"
-RUN /opt/conda/bin/conda run -n merged_env R -e "install.packages('Seurat', repos ='https://cran.nyuad.nyu.edu/')"
+
+RUN conda run -n merged_env R -e "devtools::install_github('cole-trapnell-lab/monocle3')"
+RUN conda run -n merged_env R -e "devtools::install_github('mahmoudibrahim/genesorteR')"
+RUN conda run -n merged_env R -e "remotes::install_github('satijalab/seurat-wrappers')"
+RUN conda run -n merged_env R -e "remotes::install_github('daqana/dqshiny')"
+RUN conda run -n merged_env R -e "install.packages('Seurat', repos ='http://cran.rstudio.com/')"
 
 # Clean stale data
-RUN /opt/conda/bin/conda clean -a -y
-
+RUN conda clean -a -y
 
 
 # animalcules
@@ -44,7 +45,6 @@ COPY BSgenome.Hsapiens.UCSC.hg19_1.4.3.tar.gz /
 
 # ClusterProfShinyGSEA
 COPY ClusterProfShinyGSEA /srv/shiny-server/ClusterProfShinyGSEA
-
 
 #ClusterProfShinyORA
 COPY ClusterProfShinyORA /srv/shiny-server/ClusterProfShinyORA
