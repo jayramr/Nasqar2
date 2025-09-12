@@ -57,7 +57,7 @@ COPY mergeFPKMs /srv/shiny-server/mergeFPKMs
 COPY tsar_nasqar /srv/shiny-server/tsar_nasqar
 
 # # Copy BSgenome package
-# COPY BSgenome.Hsapiens.UCSC.hg19_1.4.3.tar.gz /
+COPY BSgenome.Hsapiens.UCSC.hg19_1.4.3.tar.gz /
 
 # Copy configuration files
 COPY nginx.conf /etc/nginx/nginx.conf
