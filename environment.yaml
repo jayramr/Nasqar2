@@ -92,4 +92,5 @@ dependencies:
 - gcc_linux-64
 - gxx_linux-64
 - presto
+- binutils #added for monocle deps
 name: merged_env
