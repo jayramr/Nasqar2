@@ -31,12 +31,16 @@ ENV PATH /opt/conda/envs/merged_env/bin:$PATH
 # Combine all R package installations into a single layer
 RUN conda run -n merged_env R -e "\
     install.packages(c('smplot2', 'GOplot', 'wordcloud2', 'Seurat'), repos='http://cran.rstudio.com/'); \
-    devtools::install_github('cole-trapnell-lab/monocle3'); \
+    remotes::install_github('bnprks/BPCells/r'); \
     devtools::install_github('mahmoudibrahim/genesorteR'); \
     remotes::install_github('satijalab/seurat-wrappers'); \
     remotes::install_github('daqana/dqshiny')"
 
-RUN conda run -n merged_env R -e "remotes::install_github('bnprks/BPCells/r')"
+
+#Installation of monocle
+#RUN conda run -n merged_env R -e "remotes::install_github('bnprks/BPCells/r')"
+RUN conda run -n merged_env R -e "devtools::install_github('cole-trapnell-lab/monocle3')"
+
 
 
 # # Install BSgenome package

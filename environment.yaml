@@ -92,5 +92,6 @@ dependencies:
 - gcc_linux-64
 - gxx_linux-64
 - presto
-- binutils #added for monocle deps
+- r-seurat #added for BPcells monocle deps
+- binutils #added for BPcells monocle deps
 name: merged_env
