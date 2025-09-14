@@ -34,8 +34,10 @@ RUN conda run -n merged_env R -e "\
     devtools::install_github('cole-trapnell-lab/monocle3'); \
     devtools::install_github('mahmoudibrahim/genesorteR'); \
     remotes::install_github('satijalab/seurat-wrappers'); \
-    remotes::install_github("bnprks/BPCells/r"); \
     remotes::install_github('daqana/dqshiny')"
+
+RUN conda run -n merged_env R -e "remotes::install_github('bnprks/BPCells/r')"
+
 
 # # Install BSgenome package
 # RUN conda run -n merged_env R CMD INSTALL /BSgenome.Hsapiens.UCSC.hg19_1.4.3.tar.gz
