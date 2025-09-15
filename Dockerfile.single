@@ -43,10 +43,8 @@ SHELL ["/bin/bash", "-c"]
 RUN source activate merged_env && \
     R -e "devtools::install_github('cole-trapnell-lab/monocle3', force = TRUE)"
 
-
-
 # # Install BSgenome package
-# RUN conda run -n merged_env R CMD INSTALL /BSgenome.Hsapiens.UCSC.hg19_1.4.3.tar.gz
+RUN conda run -n merged_env R CMD INSTALL /BSgenome.Hsapiens.UCSC.hg19_1.4.3.tar.gz
 
 # Clean stale data
 RUN mamba clean -a -y
