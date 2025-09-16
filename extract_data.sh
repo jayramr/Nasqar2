@@ -21,6 +21,6 @@ cp -r data/ClusterProfShinyORA/www  ClusterProfShinyORA/
 cp -r data/ClusterProfShinyGSEA/www  ClusterProfShinyGSEA/
 cp -r data/DEApp/www  DEApp/
 cp -r data/GeneCountMerger/www GeneCountMerger/
-cp -r  data/NASQAR/tsar_nasqar/www      NASQAR/tsar_nasqar
-cp -r  data/NASQAR/mergeFPKMs/www      NASQAR/mergeFPKMs
+cp -r  data/NASQAR/tsar_nasqar/www      tsar_nasqar/
+cp -r  data/NASQAR/mergeFPKMs/www      mergeFPKMs/
 cp -r  data/ATACseqQCShniy/www      ATACseqQCShniy/
